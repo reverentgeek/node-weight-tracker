@@ -7,7 +7,7 @@ const ejs = require( "ejs" );
 const auth = require( "./auth" );
 const sql = require( "./sql" );
 
-const register = async ( server, config ) => {
+const register = async server => {
 	await server.register( [ Inert, Vision, auth, sql ] );
 
 	// configure view templates

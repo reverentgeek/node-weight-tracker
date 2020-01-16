@@ -4,9 +4,9 @@ const path = require( "path" );
 const boom = require( "@hapi/boom" );
 const api = require( "./api" );
 
-const register = async ( server, config ) => {
+const register = async server => {
+	await api.register( server );
 
-	api.register( server );
 	server.route( {
 		method: "GET",
 		path: "/",
@@ -14,7 +14,7 @@ const register = async ( server, config ) => {
 			auth: {
 				mode: "try"
 			},
-			handler: function ( request, h ) {
+			handler: ( request, h ) => {
 				return h.view( "index", {
 					title: "Home",
 					isAuthenticated: request.auth.isAuthenticated
@@ -64,8 +64,7 @@ const register = async ( server, config ) => {
 				throw boom.unauthorized( `Authentication failed: ${ request.auth.error.message }` );
 			}
 			request.cookieAuth.set( request.auth.credentials );
-			return ( request.query.next ) ? h.redirect( request.query.next ) : h.redirect( "/" );
-			// return h.redirect( "/" );
+			return h.redirect( "/" );
 		},
 		options: {
 			auth: "okta"

@@ -4,7 +4,7 @@
 	"description": "Sample Node.js web application using hapi, PostgreSQL, and Okta",
 	"main": "src/index.js",
 	"scripts": {
-		"dev": "nodemon --watch src -e js,html src/index.js",
+		"dev": "nodemon --watch src -e css,ejs,js src/index.js",
 		"initdb": "node tools/initdb.js",
 		"lint": "eslint --fix ./",
 		"test": "echo \"Error: no test specified\" && exit 1"
