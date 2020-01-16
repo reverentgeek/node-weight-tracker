@@ -10,7 +10,10 @@ const register = async ( server ) => {
 		path: "/api/measurements",
 		handler: async ( request, h ) => {
 			try {
-				const userId = "1234";
+				if ( !request.auth.isAuthenticated ) {
+					return boom.unauthorized();
+				}
+				const userId = request.auth.credentials.profile.id;
 				const measurements = await h.sql`SELECT 
 					id
 					, measure_date AS "measureDate"
@@ -23,6 +26,9 @@ const register = async ( server ) => {
 				console.log( err );
 				return boom.serverUnavailable();
 			}
+		}, 
+		options: {
+			auth: { mode: "try" }
 		}
 	} );
 
@@ -32,7 +38,10 @@ const register = async ( server ) => {
 		path: "/api/measurements/{id}",
 		handler: async ( request, h ) => {
 			try {
-				const userId = "1234";
+				if ( !request.auth.isAuthenticated ) {
+					return boom.unauthorized();
+				}
+				const userId = request.auth.credentials.profile.id;
 				const id = request.params.id;
 				const res = await h.sql`SELECT 
 					id
@@ -48,6 +57,7 @@ const register = async ( server ) => {
 			}
 		},
 		options: {
+			auth: { mode: "try" },
 			validate: {
 				params: joi.object( {
 					id: joi.number().integer().message( "id parameter must be number" )
@@ -62,7 +72,10 @@ const register = async ( server ) => {
 		path: "/api/measurements",
 		handler: async ( request, h ) => {
 			try {
-				const userId = "1234";
+				if ( !request.auth.isAuthenticated ) {
+					return boom.unauthorized();
+				}
+				const userId = request.auth.credentials.profile.id;
 				const { measureDate, weight } = request.payload;
 				const res = await h.sql`INSERT INTO measurements 
 						( user_id, measure_date, weight )
@@ -80,6 +93,7 @@ const register = async ( server ) => {
 			}
 		},
 		options: {
+			auth: { mode: "try" },
 			validate: {
 				payload: joi.object( {
 					measureDate: joi.date(),
@@ -95,7 +109,10 @@ const register = async ( server ) => {
 		path: "/api/measurements/{id}",
 		handler: async ( request, h ) => {
 			try {
-				const userId = "1234";
+				if ( !request.auth.isAuthenticated ) {
+					return boom.unauthorized();
+				}
+				const userId = request.auth.credentials.profile.id;
 				const id = request.params.id;
 				const { measureDate, weight } = request.payload;
 				const res = await h.sql`UPDATE measurements 
@@ -116,6 +133,7 @@ const register = async ( server ) => {
 			}
 		},
 		options: {
+			auth: { mode: "try" },
 			validate: {
 				params: joi.object( {
 					id: joi.number().integer()
@@ -134,7 +152,10 @@ const register = async ( server ) => {
 		path: "/api/measurements/{id}",
 		handler: async ( request, h ) => {
 			try {
-				const userId = "1234";
+				if ( !request.auth.isAuthenticated ) {
+					return boom.unauthorized();
+				}
+				const userId = request.auth.credentials.profile.id;
 				const id = request.params.id;
 				const res = await h.sql`DELETE 
 				FROM 	measurements 
@@ -148,6 +169,7 @@ const register = async ( server ) => {
 			}
 		},
 		options: {
+			auth: { mode: "try" },
 			validate: {
 				params: joi.object( {
 					id: joi.number().integer()
