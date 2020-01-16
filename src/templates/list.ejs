@@ -1,0 +1,107 @@
+<script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
+<script src="https://unpkg.com/vue-chartkick@0.5.1"></script>
+<div id="app">
+	<h1 class="title">Measurements</h1>
+	<div class="section" v-if="errorMessage">
+		<div class="notification is-danger" v-text="errorMessage"></div>
+	</div>
+	<div v-if="fetching">Getting your measurements...</div>
+	<div v-if="hasData">
+		<line-chart :data="chartData" :min="chartMinimum"></line-chart>
+		<table class="table is-striped is-narrow">
+			<thead>
+				<tr><th>Date</th><th>Weight</th><th></th></tr>
+			</thead>
+			<tbody>
+				<tr v-for="m in measurements">
+					<td v-text="m.measureDate"></td>
+					<td v-text="m.weight"></td>
+					<td><button class="button is-danger is-light is-small" @click="remove(m)">Delete</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div v-if="noData">No measurements to display</div>
+</div>
+
+<script>
+	Vue.use(Chartkick.use(Chart));
+	const app = new Vue({
+		el: "#app",
+		computed: {
+			noData: function() {
+				return this.measurements.length === 0;
+			},
+			hasData: function() {
+				return this.measurements.length > 0;
+			},
+			chartData: function() {
+				const data = {};
+				this.measurements.forEach(m => data[m.measureDate] = m.weight);
+				return data;
+			},
+			chartMinimum: function() {
+				// Min value is the lowest measurement down to the nearest multiple of 10
+				return Math.floor(this.measurements.reduce( (prev, current) => {
+					return prev.weight < current.weight ? prev.weight : current.weight;
+				}, 0) / 10) * 10;
+			}
+		},
+		data() {
+			return {
+				measurements: [],
+				fetching: false,
+				errorMessage: ""
+			}
+		},
+		mounted() {
+			this.fetchMeasurements();
+		},
+		methods: {
+			fetchMeasurements: async function () {
+				this.measurements = [];
+				this.fetching = true;
+				this.errorMessage = "";
+
+				const response = await fetch("/api/measurements", {
+					method: "GET",
+					credentials: "same-origin"
+				});
+				
+				this.fetching = false;
+
+				if (response.status === 200) {
+					const json = await response.json();
+					const now = new Date();
+					const offset = now.getTimezoneOffset();
+					this.measurements = json.map(m => {
+						const dt = new Date(m.measureDate);
+						const dt2 = new Date(dt.getTime() + (offset * 60 * 1000 ));
+						return {
+							id: m.id,
+							measureDate: dt2.toLocaleDateString(undefined, "short"),
+							weight: m.weight
+						}
+					});
+				} else {
+					const json = await response.json();
+					this.errorMessage = `There was an error. ${ json.error } - ${ json.message }`;
+				}
+			},
+			remove: async function(m) {
+				if (confirm(`Are you sure you want to delete ${m.measureDate} - ${m.weight}?`)) {
+					const response = await fetch(`/api/measurements/${ m.id }`, {
+						method: "DELETE",
+						credentials: "same-origin"
+					});
+					if (response.status === 204) {
+						this.fetchMeasurements();
+					} else {
+						const json = await response.json();
+						this.errorMessage = `There was an error. ${ json.error } - ${ json.message }`;
+					}
+				}
+			}
+		}
+	});
+</script>

@@ -1,0 +1,82 @@
+<div id="app">
+	<h1 class="title">Add Measurement</h1>
+	<form @submit.prevent="addWeight">
+		<fieldset :disabled="disabled">
+			<div class="field">
+				<label class="label">Date</label>
+				<div class="control">
+					<input class="input" type="date" placeholder="Text input" v-model.trim="measureDate">
+				</div>
+			</div>
+
+			<div class="field">
+				<label class="label">Weight</label>
+				<div class="control">
+					<input class="input" type="number" step="0.1" min="0" max="2000" placeholder="Your weight" v-model.number="weight">
+				</div>
+			</div>
+
+			<div class="field is-grouped">
+				<div class="control">
+					<input type="submit" class="button is-link" value="Submit">
+				</div>
+				<div class="control">
+					<button class="button is-link is-light">Cancel</button>
+				</div>
+			</div>
+		</fieldset>
+	</form>
+	<div class="section">
+		<div v-if="message" class="notification is-success" v-text="message"></div>
+		<div v-if="errorMessage" class="notification is-danger" v-text="errorMessage"></div>
+	</div>
+</div>
+
+<script>
+	const app = new Vue({
+		el: "#app",
+		data() {
+			return {
+				measureDate: this.formatDate(new Date()),
+				weight: undefined,
+				disabled: false,
+				message: "",
+				errorMessage: ""
+			}
+		},
+		methods: {
+			addWeight: async function (e) {
+				// disable form while submitting to API
+				this.disabled = true;
+				this.message = "";
+				this.errorMessage = "";
+				const response = await fetch("/api/measurements", {
+					method: "POST",
+					credentials: "same-origin",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						measureDate: this.measureDate,
+						weight: this.weight
+					})
+				});
+				if (response.status === 200) {
+					this.weight = undefined;
+					this.message = "Weight measurement added!";
+					// clear message after 2 seconds
+					setTimeout(() => this.message="", 2000);
+				} else {
+					const json = await response.json();
+					this.errorMessage = `There was an error. ${ json.error } - ${ json.message }`;
+				}
+				this.disabled = false;
+			},
+			formatDate: function (dt) {
+				const offset = dt.getTimezoneOffset();
+				const date = new Date(dt.getTime() - (offset * 60 * 1000));
+				return date.toISOString().split("T")[0];
+			}
+		}
+	});
+</script>
