@@ -10,7 +10,11 @@
 		<line-chart :data="chartData" :min="chartMinimum"></line-chart>
 		<table class="table is-striped is-narrow">
 			<thead>
-				<tr><th>Date</th><th>Weight</th><th></th></tr>
+				<tr>
+					<th>Date</th>
+					<th>Weight</th>
+					<th></th>
+				</tr>
 			</thead>
 			<tbody>
 				<tr v-for="m in measurements">
@@ -29,20 +33,21 @@
 	const app = new Vue({
 		el: "#app",
 		computed: {
-			noData: function() {
+			noData: function () {
 				return this.measurements.length === 0;
 			},
-			hasData: function() {
+			hasData: function () {
 				return this.measurements.length > 0;
 			},
-			chartData: function() {
+			chartData: function () {
+				// maps the data returned from the API into a format the chart component understands
 				const data = {};
 				this.measurements.forEach(m => data[m.measureDate] = m.weight);
 				return data;
 			},
-			chartMinimum: function() {
+			chartMinimum: function () {
 				// Min value is the lowest measurement down to the nearest multiple of 10
-				return Math.floor(this.measurements.reduce( (prev, current) => {
+				return Math.floor(this.measurements.reduce((prev, current) => {
 					return prev.weight < current.weight ? prev.weight : current.weight;
 				}, 0) / 10) * 10;
 			}
@@ -67,7 +72,7 @@
 					method: "GET",
 					credentials: "same-origin"
 				});
-				
+
 				this.fetching = false;
 
 				if (response.status === 200) {
@@ -76,7 +81,7 @@
 					const offset = now.getTimezoneOffset();
 					this.measurements = json.map(m => {
 						const dt = new Date(m.measureDate);
-						const dt2 = new Date(dt.getTime() + (offset * 60 * 1000 ));
+						const dt2 = new Date(dt.getTime() + (offset * 60 * 1000));
 						return {
 							id: m.id,
 							measureDate: dt2.toLocaleDateString(undefined, "short"),
@@ -85,12 +90,12 @@
 					});
 				} else {
 					const json = await response.json();
-					this.errorMessage = `There was an error. ${ json.error } - ${ json.message }`;
+					this.errorMessage = `There was an error. ${json.error} - ${json.message}`;
 				}
 			},
-			remove: async function(m) {
+			remove: async function (m) {
 				if (confirm(`Are you sure you want to delete ${m.measureDate} - ${m.weight}?`)) {
-					const response = await fetch(`/api/measurements/${ m.id }`, {
+					const response = await fetch(`/api/measurements/${m.id}`, {
 						method: "DELETE",
 						credentials: "same-origin"
 					});
@@ -98,7 +103,7 @@
 						this.fetchMeasurements();
 					} else {
 						const json = await response.json();
-						this.errorMessage = `There was an error. ${ json.error } - ${ json.message }`;
+						this.errorMessage = `There was an error. ${json.error} - ${json.message}`;
 					}
 				}
 			}
