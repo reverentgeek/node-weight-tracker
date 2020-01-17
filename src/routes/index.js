@@ -3,6 +3,7 @@
 const path = require( "path" );
 const api = require( "./api" );
 const auth = require( "./auth" );
+const measurements = require( "./measurements" );
 
 const home = {
 	method: "GET",
@@ -12,32 +13,8 @@ const home = {
 			mode: "try"
 		},
 		handler: ( request, h ) => {
-			return h.view( "index", {
-				title: "Home",
-				isAuthenticated: request.auth.isAuthenticated
-			} );
+			return h.view( "index", { title: "Home" } );
 		}
-	}
-};
-
-const listMeasurements = {
-	method: "GET",
-	path: "/list",
-	handler: ( request, h ) => {
-		return h.view( "list", { title: "Measurements" } );
-	},
-	config: {
-		auth: {
-			strategy: "session"
-		}
-	}
-};
-
-const addMeasurements = {
-	method: "GET",
-	path: "/add",
-	handler: ( request, h ) => {
-		return h.view( "add", { title: "Add Measurement" } );
 	}
 };
 
@@ -63,8 +40,6 @@ const error404 = {
 
 module.exports = [
 	home,
-	listMeasurements,
-	addMeasurements,
 	staticAssets,
 	error404
-].concat( api, auth );
+].concat( api, auth, measurements );

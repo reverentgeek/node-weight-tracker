@@ -1,5 +1,12 @@
 <h1 class="title">Node.js Weight Tracker</h1>
 
-<p>Welcome to the <b>Node.js Weight Tracker</b> sample project.</p>
+<p>Welcome to the <b>Node.js Weight Tracker</b> sample project!</p>
 
-<p><a href="/add" class="button is-primary">Add Measurement</a></p>
+<% if ( auth.isAnonymous ) { %>
+	<p><a href="/login">Click here</a> to login or create an account.</p>
+<% } %>
+
+<% if ( auth.isAuthenticated ) { %>
+	<p><a href="/add">Add</a> a weight measurement or <a href="/list">view</a> your progress.</p>
+<% } %>
+
