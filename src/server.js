@@ -2,7 +2,7 @@
 
 const Hapi = require( "@hapi/hapi" );
 const registerPlugins = require( "./plugins" ).register;
-const registerRoutes = require( "./routes" ).register;
+const routes = require( "./routes" );
 
 const createServer = async config => {
 
@@ -19,7 +19,7 @@ const createServer = async config => {
 	} );
 
 	await registerPlugins( server, config );
-	await registerRoutes( server, config );
+	server.route( routes );
 
 	return server;
 };

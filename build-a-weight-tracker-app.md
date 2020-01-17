@@ -112,7 +112,6 @@ process.on( "unhandledRejection", ( err ) => {
 } );
 
 init();
-
 ```
 
 Create a new file in the `src/routes` folder named `index.js`. Add the following code to this file.
