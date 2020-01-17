@@ -95,7 +95,8 @@ const createServer = async () => {
     host: process.env.HOST || "localhost"
   } );
 
-  await routes.register( server );
+  server.route( routes );
+
   return server;
 };
 
@@ -114,25 +115,25 @@ process.on( "unhandledRejection", ( err ) => {
 init();
 ```
 
-Create a new file in the `src/routes` folder named `index.js`. Add the following code to this file.
+In the previous code, the `init()` function uses `dotenv` to read in the `.env` configuration file, creates the web server, starts the server, and outputs the address of the web server. The `createServer()` function creates an instance of the hapi server based on the `port` and `host` values in the `.env` configuration file. It then registers the routes defined in the `routes` module. There's also an event handler defined for `unhandledRejection` in case an exception occurs anywhere in the application that doesn't have error handling, which outputs the error and shuts down the server.
+
+Next you need to define at least one route for the `routes` module. Create a new file in the `src/routes` folder named `index.js`. Add the following code to this file.
 
 ```js
 "use strict";
 
-const register = async server => {
-  server.route( {
-    method: "GET",
-    path: "/",
-    handler: ( request, h ) => {
-      return "hello world!";
-    }
-  } );
+const home = {
+  method: "GET",
+  path: "/",
+  handler: ( request, h ) => {
+    return "hello world!";
+  }
 };
 
-module.exports = {
-  register
-};
+module.exports = [ home ];
 ```
+
+The previous code defines one route, `home`, which returns the text "hello world!" The module is designed to export an array, as you will be adding more routes to this module later.
 
 Open the `package.json` file and find the `scripts` section. Add the following script to this section.
 
@@ -148,11 +149,11 @@ npm run dev
 
 Open your browser and navigate to `http://localhost:8080`. You should see your "hello world!" message.
 
-Go back to the `src/routes/index.js` file and make a change to the "hello world!" message and save the file. You should see `nodemon` automatically detect the change and restart the server. Refresh the browser and you should see that change reflected.
+Go back to the `src/routes/index.js` file and make a change to the "hello world!" message and save the file. You should see `nodemon` automatically detect the change and restart the server. Refresh the browser and you should see that change reflected. You are on your way to developing a _happy_ little web application!
 
 ## Create a PostgreSQL Server with Docker
 
-> Note: If you already have an instance of PostgreSQL you can work with, great! You can skip this section.
+> Note: If you already have an instance of PostgreSQL you can work with, great! You can skip ahead to the next section.
 
 We are going to use PostgreSQL to store weight measurements. However, installing server software like PostgreSQL on a development machine is no trivial task. That's where Docker comes in! If you don't already have Docker installed, follow the [install guide](https://docs.docker.com/install/#supported-platforms) and then come back.
 
@@ -180,7 +181,7 @@ Here is a quick explanation of the previous Docker parameters.
 
 > Note: If you restart your computer, may need to restart the Docker container. You can do that from the command line using the following command: `docker start measurements`.
 
-## Add PostgreSQL configuration
+## Add PostgreSQL Configuration
 
 Add the following settings to the end of the `.env` file.
 
@@ -195,7 +196,7 @@ PGPORT=5432
 
 Note: If you changed the database administrator password, or you have different credentials for an existing server, be sure to update the values to match your specific environment.
 
-## Add a PostgreSQL database build script
+## Add a PostgreSQL Database Build Script
 
 In order to use a database, you need a way to initialize it with any tables and other schema, initial data, and so forth. One way to do that is to create a script. Here you'll use Node.js to execute a build script that will create the schema needed for the application.
 

@@ -23,6 +23,7 @@ module.exports = {
 			redirectTo: "/authorization-code/callback", // If there is no session, redirect here
 		} );
 
+		// configure okta oauth strategy
 		server.auth.strategy( "okta", "bell", {
 			provider: "okta",
 			config: { uri: process.env.OKTA_ORG_URL },
@@ -33,10 +34,11 @@ module.exports = {
 			clientSecret: process.env.OKTA_CLIENT_SECRET
 		} );
 
+		// set the default authorization strategy for all routes
 		server.auth.default( "session" );
 
+		// Hook into onPreResponse event to add authentication info to every view
 		server.ext( "onPreResponse", ( request, h ) => {
-			// Add authentication info to every view by default
 			if ( request.response.variety === "view" ) {
 				const auth = request.auth.isAuthenticated ? {
 					isAuthenticated: true,
@@ -46,7 +48,10 @@ module.exports = {
 					lastName: request.auth.artifacts.profile.lastName
 				} : {
 					isAuthenticated: false,
-					isAnonymous: true
+					isAnonymous: true,
+					email: "",
+					firstName: "",
+					lastName: ""
 				};
 				request.response.source.context.auth = auth;
 			}
