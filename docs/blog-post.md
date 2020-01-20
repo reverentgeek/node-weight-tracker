@@ -9,7 +9,7 @@ In this tutorial, you are going to create a modern Node.js application to keep t
 Before we begin, let's first check some requirements.
 
 * [Node.js](https://nodejs.org/) version 12.x or higher.
-* [A PostgreSQL database](https://www.postgresql.org/). This can be installed locally using Docker. More details on this later in the tutorial!
+* [A PostgreSQL database](https://www.postgresql.org/). If you don't already have PostgreSQL, you can install it using Docker. More details on this later in the tutorial!
 * [A free Okta developer account](https://developer.okta.com/) for account registration, login, and security.
 
 ## Create Your Node.js Project
@@ -27,7 +27,7 @@ Next, use `npm` to initialize the project's `package.json` file.
 npm init -y
 ```
 
-In this tutorial, you will use [hapi](https://hapi.dev), a wonderful application framework that supports all the latest features of Node.js and the JavaScript language. Here is an overview of the modules you will use in this project.
+In this tutorial, you will use [hapi](https://hapi.dev), an excellent application framework that supports all the latest features of Node.js and the JavaScript language. Here is an overview of the modules you will use in this project.
 
 |Module|Description|
 |:---|:---|
@@ -119,7 +119,7 @@ init();
 
 In the previous code, the `init()` function uses `dotenv` to read in the `.env` configuration file, creates the web server, starts the server, and outputs the address of the web server. The `createServer()` function creates an instance of the hapi server based on the `port` and `host` environment variables, which are configured in the `.env` file. It then registers the routes defined in the `routes` module. There's also an event handler for `unhandledRejection` in case an exception occurs anywhere in the application that doesn't have error handling, which outputs the error and shuts down the server.
 
-Next you need to define at least one route for the `routes` module. Create a new file in the `src/routes` folder named `index.js`. Add the following code to this file.
+Next, you need to define at least one route for the `routes` module. Create a new file in the `src/routes` folder named `index.js`. Add the following code to this file.
 
 ```js
 "use strict";
@@ -181,7 +181,7 @@ Here is a quick explanation of the previous Docker command line arguments.
 |`-e`|This sets an environment variable in the container.|
 |`postgres`|This final argument tells Docker to use the postgres image.|
 
-> Note: If you restart your computer, may need to restart the Docker container. You can do that from the command line using the following command: `docker start measurements`.
+> Note: If you restart your computer, you may need to restart the Docker container. You can do that from the command line using the following command: `docker start measurements`.
 
 ## Add PostgreSQL Configuration
 
@@ -200,7 +200,7 @@ Note: If you changed the database administrator password, or you have different 
 
 ## Add a PostgreSQL Database Build Script
 
-In order to use a database, you need a way to first set up any tables and other schema, initial data, and so forth. One way to do that is to create a script. Here you'll use Node.js to execute a build script that will create the schema needed for the application.
+To use a new database, you need a way to create tables, add initial data, and so forth. One way to do that is to create a script. Here you'll use Node.js to execute a build script that will add the schema needed for the application.
 
 Create a folder in the root of the project named `tools`. In this folder, create a new file named `initdb.js` and add the following code.
 
@@ -259,7 +259,7 @@ You should see the message `finished` at the console. A new table named `measure
 
 ## Easily Add Authentication to Node and hapi
 
-When building an application like this weight tracker, you will probably want your data kept private and safe. It would be nice to share this application with others so they can take advantage of it, too. However, to create your own user registration and login (authentication) is no trivial task. There are registration, login, and password reset forms, email verification steps, encrypting passwords, and the list goes on and on. Oh, and how about keeping up with all the latest attacks and keeping your data secure? Yikes!
+When building an application like this weight tracker, you will probably want your data kept private and safe. It would be nice to share this application with others so they can take advantage of it, too. However, to build user registration and login (authentication) from scratch is no trivial task. There are registration, login, and password reset forms, email verification steps, encrypting passwords, and the list goes on and on. Oh, and how about keeping up with all the latest attacks and keeping your data secure? Yikes!
 
 The good news is Okta makes all of this a breeze! To begin, go to [developer.okta.com](https://developer.okta.com) and create a free developer account.
 
@@ -310,7 +310,7 @@ Next, click the **Edit** button. Change **Self-service registration** to *Enable
 
 ## Secure Your Node.js Application
 
-Now that you have an Okta account and application, it's time to configure the hapi application to verify users are logged in any time a protected resource is requested. If not, the application will prompt them to login using Okta.
+Now that you have an Okta account and application, it's time to configure the hapi application to verify only authenticated users can access protected resources. If not, the app will prompt them to login using Okta.
 
 Under `src/plugins`, create a new file named `auth.js`. Copy the following code into this file.
 
@@ -404,11 +404,11 @@ module.exports = {
 };
 ```
 
-In addition to registering the new `auth` plugin, this code also configures the `ejs`, `inert`, and `vision` plugins that will be used to render HTML content. Let's set up a few EJS templates to render.
+In addition to registering the new `auth` plugin, this code also configures the `ejs`, `inert`, and `vision` plugins to render HTML content. Let's set up a few EJS templates.
 
 ### Add HTML templates
 
-In the `src/templates` folder, create a new file named `layout.ejs`. This is main template that all views will use. Paste the following markup into `layout.ejs`.
+In the `src/templates` folder, create a new file named `layout.ejs`. The layout is the main template all views will use. Paste the following markup into `layout.ejs`.
 
 ```html
 <!DOCTYPE html>
@@ -494,7 +494,7 @@ You might notice there's an `include` in this template for navigation. The next 
 
 As you can see, there are some conditional statements in the template based on whether or not the current user is authenticated. If the user is not authenticated, a **Login** button is displayed. If a user is currently logged in, a welcome message and a **Logout** button are displayed.
 
-Next you will add an EJS template for the home page. In the `templates` folder, create a new file named `index.ejs` and paste in the following markup.
+Next, you will add an EJS template for the home page. In the `templates` folder, create a new file named `index.ejs` and paste in the following markup.
 
 ```html
 <h1 class="title">Node.js Weight Tracker</h1>
@@ -510,7 +510,7 @@ Next you will add an EJS template for the home page. In the `templates` folder, 
 <% } %>
 ```
 
-While you're adding templates, go ahead an add a template for a custom 404 (Not Found) response. Create a `404.ejs` file in the `templates` folder and paste in the following markup.
+While you're adding templates, go ahead and add a template for a custom 404 (Not Found) response. Create a `404.ejs` file in the `templates` folder and paste in the following markup.
 
 ```html
 <h1 class="title">Oh no!</h1>
@@ -520,7 +520,7 @@ While you're adding templates, go ahead an add a template for a custom 404 (Not 
 
 ### Configure public and secure routes
 
-Now you need to update the routes to return the home page view, and configure which routes require authentication. In the `src/routes` folder, create a new file named `auth.js` and paste the following code.
+Now you need to update the routes to return the home page view and configure which routes require authentication. In the `src/routes` folder, create a new file named `auth.js` and paste the following code.
 
 ```js
 "use strict";
@@ -953,7 +953,7 @@ The `postgres` client is used for each of these routes to execute SQL statements
 
 ## Create Views for Adding Measurements and Tracking Progress
 
-Now that the application has an API for weight measurements, the final step is to create the user interface. To make the UI a little more dynamic as well as easier to program, you will use the Vue.js framework. You may have noticed there is already a reference for this framework in the `layout.ejs` template. How to use Vue.js is out of the scope of this tutorial, but hopefully you will be able to follow how the code works.
+Now that the application has an API for weight measurements, the final step is to create the user interface. To make the UI a little more dynamic as well as easier to program, you will use the Vue.js framework. You may have noticed there is already a reference for this framework in the `layout.ejs` template. How to use Vue.js is out of the scope of this tutorial, but hopefully, you will be able to follow how the code works.
 
 Go to the `src/templates` folder, create a new file named `add.ejs`, and add the following markup and client-side code.
 
