@@ -9,3 +9,4 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 node_modules/
 .npm
 .env
+.DS_Store

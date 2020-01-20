@@ -1246,6 +1246,9 @@ module.exports = [
 
 You are now ready to test your weight tracker app! You should be able to add measurements and track your progress.
 
+## 
+
+The entire source code for this project is at [github.com/reverentgeek/node-weight-tracker](https://github.com/reverentgeek/node-weight-tracker).
 
 > Note: When deploying the application to a production environment, you must create a new `.env` file or use real environment variables to configure the application. Values such as the PostgreSQL connection information, `HOST_URL`, `COOKIE_ENCRYPT_PWD`, and `NODE_ENV` configuration _must_ be updated to reflect the new environment.
 
