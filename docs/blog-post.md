@@ -1246,9 +1246,17 @@ module.exports = [
 
 You are now ready to test your weight tracker app! You should be able to add measurements and track your progress.
 
-## 
+## Learn More About Building Secure Node.js Apps
 
-The entire source code for this project is at [github.com/reverentgeek/node-weight-tracker](https://github.com/reverentgeek/node-weight-tracker).
+The entire source code for this project is available at [github.com/reverentgeek/node-weight-tracker](https://github.com/reverentgeek/node-weight-tracker). I believe this project would be a great foundation for many types of Web applications built using Node.js.
 
 > Note: When deploying the application to a production environment, you must create a new `.env` file or use real environment variables to configure the application. Values such as the PostgreSQL connection information, `HOST_URL`, `COOKIE_ENCRYPT_PWD`, and `NODE_ENV` configuration _must_ be updated to reflect the new environment.
 
+If you liked this post, you may also enjoy some of my other posts related to Node.js and security!
+
+* [Use TypeScript to Build a Node API with Express](https://developer.okta.com/blog/2018/11/15/node-express-typescript)
+* [Build a Secure Node.js App with SQL Server](https://developer.okta.com/blog/2019/03/11/node-sql-server)
+* [Add Authentication and Personalization to VuePress](https://developer.okta.com/blog/2019/06/14/add-authentication-and-personalization-to-vuepress)
+* [Build a Command Line Application with Node.js](https://developer.okta.com/blog/2019/06/18/command-line-app-with-nodejs)
+* [Top 10 Visual Studio Code Extensions for Node.js](https://developer.okta.com/blog/2019/05/08/top-vs-code-extensions-for-nodejs-developers)
+* [An Illustrated Guide to OAuth and OpenID Connect](https://developer.okta.com/blog/2019/10/21/illustrated-guide-to-oauth-and-oidc)
