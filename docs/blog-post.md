@@ -1,20 +1,20 @@
 # Build a Weight Tracker App with Node.js and PostgreSQL
 
-Did you make any resolutions this year? One resolution I seem to make *every* year is to lose weight and exercise. Sometimes I stick to it.
+Did you make any resolutions this year? One resolution I seem to make *every* year is to lose weight and exercise. Sometimes I even stick to it.
 
 A good way I have found to keep on track with any resolution is to record progress. There's something about visualizing progress that helps me stay motivated.
 
-In this tutorial, you are going to create a modern Node.js application to keep track weight measurements. The technologies you're going to use include PostgreSQL, a new and exciting Postgres client for Node.js, hapi, Vue.js, and Okta to provide account registration and login, and to secure the API!
+In this tutorial, you are going to create a modern Node.js application to keep track of weight measurements. The technologies you're going to use include PostgreSQL, a new and exciting Postgres client for Node.js, hapi, Vue.js, and Okta to secure the API and provide account registration and login!
 
 Before we begin, let's first check some requirements.
 
-* [Node.js](https://nodejs.org/) 12.x or higher
-* [PostgreSQL](https://www.postgresql.org/): This can be installed locally using Docker. More details on this later in the tutorial!
-* [Free Okta developer account](https://developer.okta.com/): For account registration, login, and security
+* [Node.js](https://nodejs.org/) version 12.x or higher.
+* [A PostgreSQL database](https://www.postgresql.org/). This can be installed locally using Docker. More details on this later in the tutorial!
+* [A free Okta developer account](https://developer.okta.com/) for account registration, login, and security.
 
 ## Create Your Node.js Project
 
-Open up your terminal or command prompt. Change to the folder where you store projects, and create a new folder for this project.
+Let's dive straight into creating the Node.js project. Open your terminal or command prompt. Change to the folder where you store projects, and create a new folder for this project.
 
 ```sh
 mkdir node-weight-tracker
@@ -27,29 +27,31 @@ Next, use `npm` to initialize the project's `package.json` file.
 npm init -y
 ```
 
-In this tutorial, we are using [hapi](https://hapi.dev), a wonderful application framework that supports all the latest features of Node.js and the JavaScript language. Here is an overview of the modules you will use in this project.
+In this tutorial, you will use [hapi](https://hapi.dev), a wonderful application framework that supports all the latest features of Node.js and the JavaScript language. Here is an overview of the modules you will use in this project.
 
 |Module|Description|
 |:---|:---|
-|hapi|Web application framework for Node.js|
-|bell|Hapi plugin to support third-party logins|
-|boom|Hapi plugin for HTTP errors|
-|cookie|Hapi plugin for cookie-based authentication|
-|inert|Hapi plugin for serving static files|
-|joi|Hapi plugin for validating request and response data|
-|vision|Hapi plugin for rendering server-side templates|
-|dotenv|A module to manage configuration using environment variables|
-|ejs|A template engine that uses JavaScript|
-|postgres|A PostgreSQL client|
-|nodemon|Monitors file changes and automatically restarts the server (for development only and not to be used in production)|
+|`hapi`|A web application framework for Node.js|
+|`bell`|A hapi plugin to support third-party logins|
+|`boom`|A hapi plugin for HTTP errors|
+|`cookie`|A hapi plugin for cookie-based authentication|
+|`inert`|A hapi plugin for serving static files|
+|`joi`|A hapi plugin for validating request and response data|
+|`vision`|A hapi plugin for rendering server-side HTML templates|
+|`dotenv`|A module to manage configuration using environment variables|
+|`ejs`|A template engine based on JavaScript|
+|`postgres`|A PostgreSQL client|
+|`nodemon`|A developer utility that monitors file changes and automatically restarts the Node.js application (not to be used in production)|
 
-Install all the project dependencies using the following `npm` commands. It's important to note these commands install specific versions available at the time of this writing.
+Install the project dependencies using the following `npm` commands.
 
 ```sh
 npm install @hapi/hapi@19 @hapi/bell@12 @hapi/boom@9 @hapi/cookie@11 @hapi/inert@6 @hapi/joi@17 @hapi/vision@6 dotenv@8 ejs@3 postgres@1
 
 npm install --save-dev nodemon@2
 ```
+
+> Note: To ensure compatibility, the previous commands install specific versions available at the time of this writing.
 
 Now open the project in your editor of choice.
 
@@ -115,7 +117,7 @@ process.on( "unhandledRejection", ( err ) => {
 init();
 ```
 
-In the previous code, the `init()` function uses `dotenv` to read in the `.env` configuration file, creates the web server, starts the server, and outputs the address of the web server. The `createServer()` function creates an instance of the hapi server based on the `port` and `host` values in the `.env` configuration file. It then registers the routes defined in the `routes` module. There's also an event handler defined for `unhandledRejection` in case an exception occurs anywhere in the application that doesn't have error handling, which outputs the error and shuts down the server.
+In the previous code, the `init()` function uses `dotenv` to read in the `.env` configuration file, creates the web server, starts the server, and outputs the address of the web server. The `createServer()` function creates an instance of the hapi server based on the `port` and `host` environment variables, which are configured in the `.env` file. It then registers the routes defined in the `routes` module. There's also an event handler for `unhandledRejection` in case an exception occurs anywhere in the application that doesn't have error handling, which outputs the error and shuts down the server.
 
 Next you need to define at least one route for the `routes` module. Create a new file in the `src/routes` folder named `index.js`. Add the following code to this file.
 
@@ -133,7 +135,7 @@ const home = {
 module.exports = [ home ];
 ```
 
-The previous code defines one route, `home`, which returns the text "hello world!" The module is designed to export an array, as you will be adding more routes to this module later.
+The previous code defines one route, `home`, which returns the text "hello world!" The module exports an array of routes, as you will be adding more routes to this module later.
 
 Open the `package.json` file and find the `scripts` section. Add the following script to this section.
 
@@ -149,13 +151,13 @@ npm run dev
 
 Open your browser and navigate to `http://localhost:8080`. You should see your "hello world!" message.
 
-Go back to the `src/routes/index.js` file and make a change to the "hello world!" message and save the file. You should see `nodemon` automatically detect the change and restart the server. Refresh the browser and you should see that change reflected. You are on your way to developing a _happy_ little web application!
+Go back to the `src/routes/index.js` file and make a change to the "hello world!" message and save the file. You should see `nodemon` automatically detect the change and restart the server. Refresh the browser and you should see the change reflected. You are on your way to developing a _happy_ little web application!
 
 ## Create a PostgreSQL Server with Docker
 
 > Note: If you already have an instance of PostgreSQL you can work with, great! You can skip ahead to the next section.
 
-We are going to use PostgreSQL to store weight measurements. However, installing server software like PostgreSQL on a development machine is no trivial task. That's where Docker comes in! If you don't already have Docker installed, follow the [install guide](https://docs.docker.com/install/#supported-platforms) and then come back.
+We are going to use PostgreSQL to store weight measurements. However, installing server software like PostgreSQL on a development machine is no trivial task. That's where a container system like Docker can make development so much easier! If you don't already have Docker installed, follow the [install guide](https://docs.docker.com/install/#supported-platforms) and then come back.
 
 With Docker installed, run the following command to download the latest PostgreSQL container.
 
@@ -169,15 +171,15 @@ Next, create an instance of a PostgreSQL database server. Feel free to change th
 docker run -d --name measurements -p 5432:5432 -e 'POSTGRES_PASSWORD=p@ssw0rd42' postgres
 ```
 
-Here is a quick explanation of the previous Docker parameters.
+Here is a quick explanation of the previous Docker command line arguments.
 
-|Parameter|Description|
+|Argument|Description|
 |:---|:---|
-|-d|This launches the container in daemon mode, so it runs in the background.|
-|--name|This gives your Docker container a friendly name|
-|-p|This maps a TCP port on the host (your computer) to a port in the container. By default, PostgreSQL uses port 5432 for connections.|
-|-e|This sets an environment variable in the container.|
-|postgres|This final parameter tells Docker to use the postgres image.|
+|`-d`|This launches the container in daemon mode, so it runs in the background.|
+|`--name`|This gives your Docker container a friendly name.|
+|`-p`|This maps a TCP port on the host (your computer) to a port in the container. By default, PostgreSQL uses port 5432 for connections.|
+|`-e`|This sets an environment variable in the container.|
+|`postgres`|This final argument tells Docker to use the postgres image.|
 
 > Note: If you restart your computer, may need to restart the Docker container. You can do that from the command line using the following command: `docker start measurements`.
 
@@ -198,9 +200,9 @@ Note: If you changed the database administrator password, or you have different 
 
 ## Add a PostgreSQL Database Build Script
 
-In order to use a database, you need a way to initialize it with any tables and other schema, initial data, and so forth. One way to do that is to create a script. Here you'll use Node.js to execute a build script that will create the schema needed for the application.
+In order to use a database, you need a way to first set up any tables and other schema, initial data, and so forth. One way to do that is to create a script. Here you'll use Node.js to execute a build script that will create the schema needed for the application.
 
-Next, create a folder in the root of the project named `tools`. In this folder, create a new file named `initdb.js` and add the following code.
+Create a folder in the root of the project named `tools`. In this folder, create a new file named `initdb.js` and add the following code.
 
 ```js
 "use strict";
@@ -257,7 +259,7 @@ You should see the message `finished` at the console. A new table named `measure
 
 ## Easily Add Authentication to Node and hapi
 
-When building an application like this weight tracker, you probably want your data kept private and safe. It would be nice to share this application with others so they can take advantage of it, too. However, to create your own user registration and login (authentication) is no trivial task. There are registration, login, and password reset forms, email verification steps, encrypting passwords, and the list goes on and on. Oh, and how about keeping up with all the latest attacks and keeping your data secure? Yikes!
+When building an application like this weight tracker, you will probably want your data kept private and safe. It would be nice to share this application with others so they can take advantage of it, too. However, to create your own user registration and login (authentication) is no trivial task. There are registration, login, and password reset forms, email verification steps, encrypting passwords, and the list goes on and on. Oh, and how about keeping up with all the latest attacks and keeping your data secure? Yikes!
 
 The good news is Okta makes all of this a breeze! To begin, go to [developer.okta.com](https://developer.okta.com) and create a free developer account.
 
@@ -271,7 +273,7 @@ Next, choose to create a **Web Application** and click **Next**.
 
 ![Add web application](okta-add-web-application.jpg)
 
-Enter a name for your application, such as *Node Weight Tracker*. Update the **Logout redirect URIs** to `http://localhost:8080/logout`. Then, click Done to finish creating the application.
+Enter a name for your application, such as *Node Weight Tracker*. Update the **Logout redirect URIs** to `http://localhost:8080/logout`. Then, click **Done** to finish creating the application.
 
 ![Web application settings](okta-add-app-settings.jpg)
 
@@ -283,7 +285,7 @@ COOKIE_ENCRYPT_PWD=superAwesomePasswordStringThatIsAtLeast32CharactersLong!
 NODE_ENV=development
 
 # Okta configuration
-OKTA_ORG_URL=https://{yourOktaOrgUrl}
+OKTA_ORG_URL=https://{yourOrgUrl}
 OKTA_CLIENT_ID={yourClientId}
 OKTA_CLIENT_SECRET={yourClientSecret}
 ```
@@ -435,7 +437,7 @@ In the `src/templates` folder, create a new file named `layout.ejs`. This is mai
 </html>
 ```
 
-You might notice there's an `include` in this template for navigation. The next step is to create a navigation template that will rendered for every page. In the `src/templates` folder, create a new folder named `includes`. In the `includes` folder, create a file named `navigation.ejs` and paste in the following markup.
+You might notice there's an `include` in this template for navigation. The next step is to create a navigation template to render for every page. In the `src/templates` folder, create a new folder named `includes`. In the `includes` folder, create a file named `navigation.ejs` and paste in the following markup.
 
 ```html
 <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -518,7 +520,7 @@ While you're adding templates, go ahead an add a template for a custom 404 (Not 
 
 ### Configure public and secure routes
 
-Now you need to update the routes to return home page view, and configure which routes require authentication. In the `src/routes` folder, create a new file named `auth.js` and paste the following code.
+Now you need to update the routes to return the home page view, and configure which routes require authentication. In the `src/routes` folder, create a new file named `auth.js` and paste the following code.
 
 ```js
 "use strict";
@@ -691,13 +693,13 @@ You are now ready to test authentication! If the application is not already runn
 npm run dev
 ```
 
-Navigate to `http://localhost:8080` and try clicking on the **Log in** button.
+Navigate to `http://localhost:8080` and try clicking on the **Log in** button. You should be authenticated and redirected back to the home page, which now displays the welcome message and **Logout** button.
 
 > Note: To ensure you see the entire login experience, I recommend opening a different browser or using an incognito/private browser window.
 
 ## Create a Secure API with PostgreSQL
 
-Now that authentication is working, you can focus on building a secure API the application can use to create, retrieve, update, and delete (CRUD) weight measurements. This is the same kind of functionality found in nearly every application.
+Now that authentication is working, you can focus on building a secure API the application can use to create, retrieve, update, and delete (CRUD) weight measurements. Basic CRUD operations are found in nearly every application that collects and stores data.
 
 The first step is to create a new hapi plugin to provide every route easy access to the PostgreSQL client. In the `src/plugins` folder, create a new file named `sql.js` and add the following code.
 
@@ -947,7 +949,7 @@ Some of the routes accept a parameter as part of the path (e.g. `getMeasurementF
 
 The `postgres` client is used for each of these routes to execute SQL statements. These statements are expressed as JavaScript template literals. The currently authenticated user `id` is used with every statement to ensure no data is leaked between accounts. The SQL client returns data as JSON, which hapi transparently returns to the browser or whatever HTTP client is requesting the API.
 
-> Does something look fishy with those SQL statements? No need to worry! SQL parameters are automatically inferred by the `postgres` client to prevent SQL injection attacks.
+> Does something look fishy with those SQL statements built with JavaScript template literals? No need to worry! SQL parameters are automatically inferred by the `postgres` client to prevent SQL injection attacks.
 
 ## Create Views for Adding Measurements and Tracking Progress
 
@@ -1041,7 +1043,7 @@ Go to the `src/templates` folder, create a new file named `add.ejs`, and add the
 </script>
 ```
 
-The `add.ejs` view displays a form with input fields for a date and a measurement, and a button to record the measurement. When a user clicks the **Submit** button, the `addWeight()` method is called. The `addWeight()` method uses the browser's `fetch` API to post the form data as JSON to the application's `/api/measurements` API route. If successful, a message is briefly displayed to let the user know the measurement was recorded. If an error occurs, an error message is displayed and the user can try to correct any issue and try submitting the form again.
+The `add.ejs` view displays a form with input fields for a date and a measurement, and a button to record the measurement. When a user clicks the **Submit** button, the `addWeight()` method is called. The `addWeight()` method uses the browser's `fetch` API to post the form data as JSON to the application's `/api/measurements` API route. If successful, a message is briefly displayed to let the user know the measurement was recorded. If an error occurs, an error message is displayed and the user can correct any issue and try submitting the form again.
 
 In the `src/templates` folder, create a new file named `list.ejs`, and add the following markup and client-side code.
 
@@ -1241,6 +1243,9 @@ module.exports = [
   error404
 ].concat( api, auth, measurements );
 ```
+
+You are now ready to test your weight tracker app! You should be able to add measurements and track your progress.
+
 
 > Note: When deploying the application to a production environment, you must create a new `.env` file or use real environment variables to configure the application. Values such as the PostgreSQL connection information, `HOST_URL`, `COOKIE_ENCRYPT_PWD`, and `NODE_ENV` configuration _must_ be updated to reflect the new environment.
 
