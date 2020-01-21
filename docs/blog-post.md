@@ -4,7 +4,7 @@ Did you make any resolutions this year? One resolution I seem to make *every* ye
 
 A good way I have found to keep on track with any resolution is to record progress. There's something about visualizing progress that helps me stay motivated.
 
-In this tutorial, you are going to create a modern Node.js application to keep track of weight measurements. The technologies you're going to use include PostgreSQL, a new and exciting Postgres client for Node.js, hapi, Vue.js, and Okta to secure the API and provide account registration and login!
+In this tutorial, you are going to create a modern Node.js application to keep track of weight measurements. We’ll use technologies like PostgreSQL, a new and exciting Postgres client for Node.js, hapi, Vue.js, and Okta to secure the API and provide account registration and login!
 
 ![Demo](build-weight-tracker-app-demo.gif)
 
@@ -16,7 +16,7 @@ Before we begin, let's first check some requirements.
 
 ## Create Your Node.js Project
 
-Let's dive straight into creating the Node.js project. Open your terminal or command prompt. Change to the folder where you store projects, and create a new folder for this project.
+Let's dive straight into creating the Node.js project. Open your terminal or command prompt, change to the folder where you store projects, and create a new folder for this project.
 
 ```sh
 mkdir node-weight-tracker
@@ -81,9 +81,9 @@ package-lock.json
 package.json
 ```
 
-### Create a "hello world" web app using hapi
+### Create a "Hello World" Web App With hapi
 
-In the `src` folder, create a new file named `index.js`. Add the following code to this file.
+In the `src` folder, create a new file named `index.js`, and add the following code to this file.
 
 ```js
 "use strict";
@@ -119,7 +119,9 @@ process.on( "unhandledRejection", ( err ) => {
 init();
 ```
 
-In the previous code, the `init()` function uses `dotenv` to read in the `.env` configuration file, creates the web server, starts the server, and outputs the address of the web server. The `createServer()` function creates an instance of the hapi server based on the `port` and `host` environment variables, which are configured in the `.env` file. It then registers the routes defined in the `routes` module. There's also an event handler for `unhandledRejection` in case an exception occurs anywhere in the application that doesn't have error handling, which outputs the error and shuts down the server.
+In the previous code, the `init()` function uses `dotenv` to read in the `.env` configuration file, creates the web server, starts the server, and outputs the address of the web server. The `createServer()` function creates an instance of the hapi server based on the `port` and `host` environment variables, which are configured in the `.env` file. It then registers the routes defined in the `routes` module. 
+
+There's also an event handler for `unhandledRejection` in case an exception occurs anywhere in the application that doesn't have error handling, which outputs the error and shuts down the server.
 
 Next, you need to define at least one route for the `routes` module. Create a new file in the `src/routes` folder named `index.js`. Add the following code to this file.
 
@@ -137,7 +139,7 @@ const home = {
 module.exports = [ home ];
 ```
 
-The previous code defines one route, `home`, which returns the text "hello world!" The module exports an array of routes, as you will be adding more routes to this module later.
+The previous code defines one route, `home`, which returns the text "hello world!" The module exports an array of routes (you will be adding more routes to this module later).
 
 Open the `package.json` file and find the `scripts` section. Add the following script to this section.
 
@@ -257,9 +259,9 @@ Now, you can run the build script at the command line with the following command
 npm run initdb
 ```
 
-You should see the message `finished` at the console. A new table named `measurements` is now in your database! Any time you want to reset your database, just rerun the script.
+You should see the message `finished` at the console. A new table named `measurements` is in your database! Any time you want to reset your database, just rerun the script.
 
-## Easily Add Authentication to Node and hapi
+## Add Authentication to Node and hapi
 
 When building an application like this weight tracker, you will probably want your data kept private and safe. It would be nice to share this application with others so they can take advantage of it, too. However, to build user registration and login (authentication) from scratch is no trivial task. There are registration, login, and password reset forms, email verification steps, encrypting passwords, and the list goes on and on. Oh, and how about keeping up with all the latest attacks and keeping your data secure? Yikes!
 
@@ -300,13 +302,15 @@ Click on the **Dashboard** link at the top. Find your **Org URL** to the right o
 
 ![Your Org URL](okta-org-url.jpg)
 
-### Enable self-service registration
+### Enable Self-Service Registration
 
 To allow other people to sign up for an account in your application, you need to enable the *self-service registration* feature. Click on the **Users** menu and select **Registration**.
 
 ![User Registration](okta-user-registration.jpg)
 
-Next, click the **Edit** button. Change **Self-service registration** to *Enabled*. Make sure the **Show "Sign Up" link"** is checked. Click the **Save** button at the bottom of the form.
+Next, click the **Edit** button. Change **Self-service registration** to *Enabled*. Make sure the **Show "Sign Up" link"** is checked. 
+
+Finally, click the **Save** button at the bottom of the form.
 
 ![User registration settings](okta-user-registration-settings.jpg)
 
@@ -408,7 +412,7 @@ module.exports = {
 
 In addition to registering the new `auth` plugin, this code also configures the `ejs`, `inert`, and `vision` plugins to render HTML content. Let's set up a few EJS templates.
 
-### Add HTML templates
+### Add HTML Templates
 
 In the `src/templates` folder, create a new file named `layout.ejs`. The layout is the main template all views will use. Paste the following markup into `layout.ejs`.
 
@@ -520,7 +524,7 @@ While you're adding templates, go ahead and add a template for a custom 404 (Not
 <p>That page was not found!</p>
 ```
 
-### Configure public and secure routes
+### Configure Public and Secure Routes
 
 Now you need to update the routes to return the home page view and configure which routes require authentication. In the `src/routes` folder, create a new file named `auth.js` and paste the following code.
 
@@ -643,7 +647,7 @@ module.exports = [
 
 The previous code updates the home page route with an auth mode `try`. The `try` mode checks to see if the user is authenticated, but doesn't require authentication. The code also imports the authentication routes, and sets up routes for static assets and the custom 404 page.
 
-### Add static assets
+### Add Static Assets
 
 Speaking of static assets, add a new folder to `src/assets` named `css`. In the `css` folder, create a new file named `site.css` and paste the following code.
 
@@ -687,9 +691,9 @@ document.addEventListener( "DOMContentLoaded", () => {
 
 This client-side JavaScript is to enable a better navigation experience for mobile and tablet browsers.
 
-### Test login
+### Test Login
 
-You are now ready to test authentication! If the application is not already running, start it using the following command.
+You are now ready to test authentication! If the application is not already running, start it by using the following command.
 
 ```sh
 npm run dev
@@ -1254,7 +1258,7 @@ The entire source code for this project is available at [github.com/reverentgeek
 
 > Note: When deploying the application to a production environment, you must create a new `.env` file or use real environment variables to configure the application. Values such as the PostgreSQL connection information, `HOST_URL`, `COOKIE_ENCRYPT_PWD`, and `NODE_ENV` configuration _must_ be updated to reflect the new environment.
 
-If you liked this post, you may also enjoy some of my other posts related to Node.js and security!
+If you liked this post, you may also enjoy some of my other posts related to Node.js and security on the Okta developer blog!
 
 * [Use TypeScript to Build a Node API with Express](https://developer.okta.com/blog/2018/11/15/node-express-typescript)
 * [Build a Secure Node.js App with SQL Server](https://developer.okta.com/blog/2019/03/11/node-sql-server)
