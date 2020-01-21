@@ -6,6 +6,8 @@ A good way I have found to keep on track with any resolution is to record progre
 
 In this tutorial, you are going to create a modern Node.js application to keep track of weight measurements. The technologies you're going to use include PostgreSQL, a new and exciting Postgres client for Node.js, hapi, Vue.js, and Okta to secure the API and provide account registration and login!
 
+![Demo](build-weight-tracker-app-demo.gif)
+
 Before we begin, let's first check some requirements.
 
 * [Node.js](https://nodejs.org/) version 12.x or higher.
