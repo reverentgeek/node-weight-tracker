@@ -11,9 +11,7 @@ const init = async () => {
 		// connect to the local database server
 		const sql = postgres();
 
-		console.log( "dropping table, if exists..." );
-		await sql`DROP TABLE IF EXISTS measurements`;
-
+		
 		console.log( "creating table..." );
 		await sql`CREATE TABLE IF NOT EXISTS measurements (
 			id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY
