@@ -8,6 +8,12 @@ try {
       checkout scm
     }
   }
+  
+   stage('clone') {
+    node {
+      git  https://github.com/galyakir/Terraform-project
+    }
+  }
 
   // Run terraform init
   stage('init') {
@@ -19,7 +25,6 @@ try {
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
       ]]) {
         ansiColor('xterm') {
-          git  https://github.com/galyakir/Terraform-project
           sh 'terraform init'
         }
       }
