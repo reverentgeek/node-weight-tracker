@@ -11,8 +11,7 @@ try {
   
    stage('clone') {
     node {
-      git  https://github.com/galyakir/Terraform-project
-    }
+        git 'https://github.com/galyakir/Terraform-project'    }
   }
 
   // Run terraform init
