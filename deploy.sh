@@ -17,7 +17,6 @@ sudo npm install dotenv
 sudo npm install postgres
 sudo npm install nodemon
 sudo npm install pm2 -g
-cd node-weight-tracker
 sudo npm install cjs
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
