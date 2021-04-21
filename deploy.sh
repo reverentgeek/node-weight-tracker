@@ -1,4 +1,6 @@
 #!/bin/sh
+:set fileformat=unix
+
 
 url=$1
 id=$2
