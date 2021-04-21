@@ -28,5 +28,3 @@ This sample application demonstrates the following technologies.
 1. Run `npm run dev` to start Node.js
 
 The associated blog post goes into more detail on how to set up PostgreSQL with Docker and how to configure your Okta account.
-
-test
