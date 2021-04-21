@@ -21,6 +21,7 @@ String credentialsId = 'awsCredentials'
           stage('build')
           {
               node {
+                  sh 'dos2unix deploy.sh'
                   sh "chmod +x -R ${env.WORKSPACE}"
                   sh '(set -f; deploy.sh $(cat var.txt))'
               }
