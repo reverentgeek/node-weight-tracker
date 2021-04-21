@@ -19,7 +19,7 @@ try {
         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
       ]]) {
         ansiColor('xterm') {
-          sh `git clone https://github.com/galyakir/Terraform-project`
+          git  https://github.com/galyakir/Terraform-project
           sh 'terraform init'
         }
       }
