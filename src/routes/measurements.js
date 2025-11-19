@@ -16,7 +16,7 @@ const listMeasurements = {
 	}
 };
 
-module.exports = [ 
+module.exports = [
 	listMeasurements,
 	addMeasurements
 ];

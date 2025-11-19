@@ -22,7 +22,7 @@ const staticAssets = {
 	method: "GET",
 	path: "/assets/{param*}",
 	handler: {
-		directory:{ 
+		directory: {
 			path: path.join( __dirname, "..", "assets" )
 		}
 	},

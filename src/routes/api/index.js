@@ -85,8 +85,7 @@ const deleteMeasurementForCurrentUserById = {
 				WHERE id = ${ id }
 					AND user_id = ${ userId }`;
 			return res.count > 0 ? h.response().code( 204 ) : boom.notFound();
-		}
-		catch( err ) {
+		} catch ( err ) {
 			console.log( err );
 			return boom.serverUnavailable();
 		}
@@ -158,8 +157,7 @@ const updateMeasurementForCurrentUserById = {
 				, measure_date AS "measureDate"
 				, weight`;
 			return res.count > 0 ? res[0] : boom.notFound();
-		}
-		catch( err ) {
+		} catch ( err ) {
 			console.log( err );
 			return boom.serverUnavailable();
 		}

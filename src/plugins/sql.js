@@ -5,8 +5,7 @@ const postgres = require( "postgres" );
 module.exports = {
 	name: "sql",
 	version: "1.0.0",
-	register: async server => {
-
+	register: async ( server ) => {
 		// create the sql client
 		const sql = postgres();
 

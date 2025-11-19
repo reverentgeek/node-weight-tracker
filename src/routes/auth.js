@@ -6,7 +6,7 @@ const login = {
 	method: "GET",
 	path: "/login",
 	options: {
-		handler: request => {
+		handler: ( request ) => {
 			if ( !request.auth.isAuthenticated ) {
 				return `Authentication failed due to: ${ request.auth.error.message }`;
 			}
@@ -51,7 +51,7 @@ const logout = {
 	}
 };
 
-module.exports = [ 
+module.exports = [
 	login,
 	oAuthCallback,
 	logout

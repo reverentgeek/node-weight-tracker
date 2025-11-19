@@ -13,9 +13,9 @@
 	"author": "David Neal <david@reverentgeek.com> (https://reverentgeek.com)",
 	"license": "MIT",
 	"devDependencies": {
-		"eslint": "^6.8.0",
-		"eslint-config-reverentgeek": "^2.2.0",
-		"nodemon": "^3.1.10"
+		"eslint": "^9.39.1",
+		"eslint-config-reverentgeek": "^6.3.5",
+		"nodemon": "^3.1.11"
 	},
 	"dependencies": {
 		"@hapi/bell": "^12.3.0",
@@ -28,5 +28,6 @@
 		"dotenv": "^8.6.0",
 		"ejs": "^3.1.10",
 		"postgres": "^1.0.2"
-	}
+	},
+	"packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd"
 }

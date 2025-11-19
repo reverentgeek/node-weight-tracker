@@ -4,8 +4,7 @@ const Hapi = require( "@hapi/hapi" );
 const registerPlugins = require( "./plugins" ).register;
 const routes = require( "./routes" );
 
-const createServer = async config => {
-
+const createServer = async ( config ) => {
 	const server = Hapi.server( {
 		port: config.port,
 		host: config.host,

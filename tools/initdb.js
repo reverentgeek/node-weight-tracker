@@ -6,7 +6,7 @@ const postgres = require( "postgres" );
 const init = async () => {
 	// read environment variables
 	dotenv.config();
-  
+
 	try {
 		// connect to the local database server
 		const sql = postgres();
