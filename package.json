@@ -23,10 +23,10 @@
 		"@hapi/cookie": "^11.0.2",
 		"@hapi/hapi": "^21.4.9",
 		"@hapi/inert": "^7.1.2",
-		"@hapi/joi": "^17.1.1",
 		"@hapi/vision": "^6.1.0",
 		"dotenv": "^8.6.0",
 		"ejs": "^3.1.10",
+		"joi": "^17.13.8",
 		"postgres": "^1.0.2"
 	}
 }

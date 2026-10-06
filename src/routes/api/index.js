@@ -1,7 +1,7 @@
 "use strict";
 
 const boom = require( "@hapi/boom" );
-const joi = require( "@hapi/joi" );
+const joi = require( "joi" );
 
 // add a new measurement for the current user
 const addMeasurementForCurrentUser = {
